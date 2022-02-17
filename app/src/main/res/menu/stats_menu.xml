@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/difficulty"
+        android:title="Choose Difficulty"
+        />
+    <item
+        android:id="@+id/viewStats"
+        android:title="View Game Statistics"
+        />
+</menu>
