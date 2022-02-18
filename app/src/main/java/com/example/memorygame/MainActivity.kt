@@ -1,8 +1,10 @@
 package com.example.memorygame
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -17,6 +19,16 @@ import java.util.*
 import kotlin.random.Random
 
 //Michelle Yun and Victoria Lei
+
+var statsAdapter: StatsAdapter? = null
+var difficulties = ArrayList<String>()
+var easyWon : Int = 0
+var easyTotal : Int = 0
+var hardWon : Int = 0
+var hardTotal : Int = 0
+var winPercents = ArrayList<String>()
+var gameStatList = ArrayList<GameStat>()
+lateinit var sharedPreferences: SharedPreferences
 
 class MainActivity : AppCompatActivity() {
     lateinit var startButton: Button
@@ -37,6 +49,12 @@ class MainActivity : AppCompatActivity() {
         green = findViewById(R.id.green)
         pink = findViewById(R.id.pink)
         yellow = findViewById(R.id.yellow)
+
+        difficulties.add("Easy")
+        difficulties.add("Hard")
+
+        winPercents.add("0")
+        winPercents.add("0")
     }//onCreate
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -83,55 +101,86 @@ class MainActivity : AppCompatActivity() {
         println(randomValues)
 
         for(i in 0 until numSquares){
-            val runnable = Runnable {
-                val handler = Handler(Looper.getMainLooper())
-                blue.setImageResource(R.drawable.bluedark)
-                handler.postDelayed({
-                    blue.setImageResource(R.drawable.blue) }, 2000)
-            }
-            val outerHandler = Handler(Looper.getMainLooper())
-            outerHandler.postDelayed(runnable, 1000)
-            println("i: $i")
-//            when(randomValues[i]){
-//                0 -> {
-//                    blue.setImageResource(R.drawable.bluedark)
-//                    handler.postDelayed({
-//                        blue.setImageResource(R.drawable.blue) }, 1000)
-//                    }
-//                1 -> {
-//                    green.setImageResource(R.drawable.greendark)
-//                    handler.postDelayed({
-//                        green.setImageResource(R.drawable.green) }, 1000)
-//                    }
-//                2 -> {
-//                    pink.setImageResource(R.drawable.pinkdark)
-//                    handler.postDelayed({
-//                        pink.setImageResource(R.drawable.pink) }, 1000)
-//                    }
-//                3 -> {
-//                    yellow.setImageResource(R.drawable.yellowdark)
-//                    handler.postDelayed({
-//                        yellow.setImageResource(R.drawable.yellow) }, 1000)
-//                    }
-//                }//when
+//            val runnable = Runnable {
+//                val handler = Handler(Looper.getMainLooper())
+//                blue.setImageResource(R.drawable.bluedark)
+//                handler.postDelayed({
+//                    blue.setImageResource(R.drawable.blue) }, 2000)
+//            }
+//            val outerHandler = Handler(Looper.getMainLooper())
+//            outerHandler.postDelayed(runnable, 1000)
+//            println("i: $i")
+            when(randomValues[i]){
+                0 -> {
+                    val handler = Handler(Looper.getMainLooper())
+                    blue.setImageResource(R.drawable.bluedark)
+                    handler.postDelayed({
+                        blue.setImageResource(R.drawable.blue) }, 1000)
+                    }
+                1 -> {
+                    val handler = Handler(Looper.getMainLooper())
+                    green.setImageResource(R.drawable.greendark)
+                    handler.postDelayed({
+                        green.setImageResource(R.drawable.green) }, 1000)
+                    }
+                2 -> {
+                    val handler = Handler(Looper.getMainLooper())
+                    pink.setImageResource(R.drawable.pinkdark)
+                    handler.postDelayed({
+                        pink.setImageResource(R.drawable.pink) }, 1000)
+                    }
+                3 -> {
+                    val handler = Handler(Looper.getMainLooper())
+                    yellow.setImageResource(R.drawable.yellowdark)
+                    handler.postDelayed({
+                        yellow.setImageResource(R.drawable.yellow) }, 1000)
+                    }
+                }//when
         }//for loop
-
+        evaluateClicks()
     }//playGame
 
-    fun tileColor() {
-
-    }
-
-    class colorChange : TimerTask() {
-        public
-        override fun run() {
-            val handler = Handler(Looper.getMainLooper())
-        }
-
-    }//colorChange
+//    class colorChange : TimerTask() {
+//        public
+//        override fun run() {
+//            val handler = Handler(Looper.getMainLooper())
+//        }
+//
+//    }//colorChange
 
     fun evaluateClicks(){
-
+        var won = false
+        //logic for evaluating if user won the round
+        addStat(won, easyLevel)
     }
+
+    fun addStat(won : Boolean, easy : Boolean){
+        if(easy){
+            easyTotal++
+            if(won) {
+                easyWon++
+            }
+            winPercents[0] = ((easyWon.toDouble()/easyTotal.toDouble())*100).toInt().toString()
+        } else {
+            hardTotal++
+            if(won) {
+                hardWon++
+            }
+            winPercents[1] = ((hardWon.toDouble()/hardTotal.toDouble())*100).toInt().toString()
+        }//if else
+
+        sharedPreferences = applicationContext.getSharedPreferences(
+            "com.example.memorygame", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString(
+            "difficulties", ObjectSerializer.serialize(difficulties))
+            .apply()
+        sharedPreferences.edit().putInt("easyWon", easyWon).apply()
+        sharedPreferences.edit().putInt("easyTotal", easyTotal).apply()
+        sharedPreferences.edit().putInt("hardWon", hardWon).apply()
+        sharedPreferences.edit().putInt("hardTotal", hardTotal).apply()
+        sharedPreferences.edit().putString(
+            "winPercents", ObjectSerializer.serialize(winPercents))
+            .apply()
+    }//addStat
 
 }//MainActivity

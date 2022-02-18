@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/table"
+    android:weightSum="2">
+
+    <TextView
+        android:id="@+id/diffLevel"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_weight="1"
+        android:paddingLeft="15dp"
+        android:text="Easy"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/winPercent"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:text="80%"
+        android:textSize="20sp"
+        android:textColor="@color/black" />
+</LinearLayout>
