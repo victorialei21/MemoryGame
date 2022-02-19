@@ -51,9 +51,13 @@ class MainActivity : AppCompatActivity() {
         startButton = findViewById(R.id.startButton)
         difficultyText = findViewById(R.id.difficultyText)
         blue = findViewById(R.id.blue)
+        blue.setEnabled(false)
         green = findViewById(R.id.green)
+        green.setEnabled(false)
         pink = findViewById(R.id.pink)
+        pink.setEnabled(false)
         yellow = findViewById(R.id.yellow)
+        yellow.setEnabled(false)
 
         difficulties.add("Easy")
         difficulties.add("Hard")
@@ -110,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         view.setVisibility(View.GONE)
         menuBar.setGroupEnabled(0, false)
 
+        // display flashing buttons
         var delayMillis : Long = 1000
         val handler = Handler(Looper.getMainLooper())
         for (i in 0 until numSquares) {
@@ -145,6 +150,12 @@ class MainActivity : AppCompatActivity() {
             }// when
             delayMillis += 1000
         } // for
+
+        // enable user buttons
+        blue.setEnabled(true)
+        green.setEnabled(true)
+        pink.setEnabled(true)
+        yellow.setEnabled(true)
 
     } // playGame
 
@@ -185,6 +196,12 @@ class MainActivity : AppCompatActivity() {
         startButton.text = "Play Again"
         startButton.setVisibility(View.VISIBLE)
         menuBar.setGroupEnabled(0, true)
+
+        // disable user buttons
+        blue.setEnabled(false)
+        green.setEnabled(false)
+        pink.setEnabled(false)
+        yellow.setEnabled(false)
 
     } // evaluateClicks
 
