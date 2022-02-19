@@ -64,6 +64,8 @@
             android:layout_height="125dp"
             android:layout_row="0"
             android:layout_column="0"
+            android:onClick="addClick"
+            android:tag="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/difficultyText"
             app:srcCompat="@drawable/blue" />
@@ -74,6 +76,8 @@
             android:layout_height="125dp"
             android:layout_row="0"
             android:layout_column="1"
+            android:onClick="addClick"
+            android:tag="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/difficultyButton"
             app:srcCompat="@drawable/green" />
@@ -84,6 +88,8 @@
             android:layout_height="125dp"
             android:layout_row="1"
             android:layout_column="0"
+            android:onClick="addClick"
+            android:tag="2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/blue"
             app:srcCompat="@drawable/pink" />
@@ -94,6 +100,8 @@
             android:layout_height="125dp"
             android:layout_row="1"
             android:layout_column="1"
+            android:onClick="addClick"
+            android:tag="3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/green"
             app:srcCompat="@drawable/yellow" />

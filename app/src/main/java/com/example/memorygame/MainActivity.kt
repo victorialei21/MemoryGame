@@ -6,16 +6,16 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 import kotlin.random.Random
 
@@ -38,7 +38,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var green : ImageButton
     lateinit var pink : ImageButton
     lateinit var yellow : ImageButton
+    lateinit var menuBar : Menu
+    lateinit var randomOrder: List<Int>
+    lateinit var userAnswers: ArrayList<Int>
     var easyLevel = true
+    var buttonClicks = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +65,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater = menuInflater
         menuInflater.inflate(R.menu.stats_menu, menu)
+        if (menu != null) {
+            menuBar = menu
+        }
         return super.onCreateOptionsMenu(menu)
     }//onCreateOptionsMenu
 
@@ -95,10 +102,14 @@ class MainActivity : AppCompatActivity() {
         var numSquares = 4
         if (!easyLevel) numSquares = 8
 
-        val randomOrder = List(numSquares) { Random.nextInt(0, 4) }
+        randomOrder = List(numSquares) { Random.nextInt(0, 4) }
+        userAnswers = ArrayList(numSquares)
         Toast.makeText(applicationContext, randomOrder.toString(), Toast.LENGTH_SHORT).show()
 
-        view.setVisibility(View.GONE) // temporarily remove button
+        // temporarily remove interactive elements
+        view.setVisibility(View.GONE)
+        menuBar.setGroupEnabled(0, false)
+
         var delayMillis : Long = 1000
         val handler = Handler(Looper.getMainLooper())
         for (i in 0 until numSquares) {
@@ -135,18 +146,47 @@ class MainActivity : AppCompatActivity() {
             delayMillis += 1000
         } // for
 
-        // bring back playAgain button
-        handler.postDelayed({
-            view.setVisibility(View.VISIBLE) }, delayMillis)
-
-        //evaluateClicks()
     } // playGame
 
+    fun addClick(view: View) {
+        val tag : Int = view.tag.toString().toInt()
+        userAnswers.add(tag)
+
+        // evaluate results
+        var size: Int = 0
+        if (easyLevel) size = 4
+        else size = 8
+        if (userAnswers.size==size) {
+            evaluateClicks()
+        }
+
+    } // addClick
+
     fun evaluateClicks(){
-        var won = false
-        //logic for evaluating if user won the round
+        var won : Boolean = false
+
+        for (i in 0 until randomOrder.count()) {
+            if (randomOrder.get(i)!=userAnswers.get(i)) {
+                won = false
+                break
+            }
+            won = true
+        }
         addStat(won, easyLevel)
-    }
+        userAnswers = ArrayList<Int>()
+
+        // toast results to user
+        var result = ""
+        if (won) result = "Correct!"
+        else result = "Incorrect!"
+        Toast.makeText(applicationContext, result, Toast.LENGTH_SHORT).show()
+
+        // bring back interactive elements
+        startButton.text = "Play Again"
+        startButton.setVisibility(View.VISIBLE)
+        menuBar.setGroupEnabled(0, true)
+
+    } // evaluateClicks
 
     fun addStat(won : Boolean, easy : Boolean){
         if(easy){
