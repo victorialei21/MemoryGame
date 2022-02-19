@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import java.util.*
 import kotlin.random.Random
 
@@ -90,63 +91,56 @@ class MainActivity : AppCompatActivity() {
             .show()
     }//chooseDifficulty
 
-    fun playGame(view : View){
+    fun playGame(view : View) {
         var numSquares = 4
-        //player must memorize 8 squares if difficulty level is hard
-        if(!easyLevel){
-            numSquares = 8
-        }
+        if (!easyLevel) numSquares = 8
 
-        val randomValues = List(numSquares) { Random.nextInt(0, 4) }
-        println(randomValues)
+        val randomOrder = List(numSquares) { Random.nextInt(0, 4) }
+        Toast.makeText(applicationContext, randomOrder.toString(), Toast.LENGTH_SHORT).show()
 
-        for(i in 0 until numSquares){
-//            val runnable = Runnable {
-//                val handler = Handler(Looper.getMainLooper())
-//                blue.setImageResource(R.drawable.bluedark)
-//                handler.postDelayed({
-//                    blue.setImageResource(R.drawable.blue) }, 2000)
-//            }
-//            val outerHandler = Handler(Looper.getMainLooper())
-//            outerHandler.postDelayed(runnable, 1000)
-//            println("i: $i")
-            when(randomValues[i]){
+        view.setVisibility(View.GONE) // temporarily remove button
+        var delayMillis : Long = 1000
+        val handler = Handler(Looper.getMainLooper())
+        for (i in 0 until numSquares) {
+            when(randomOrder[i]){
                 0 -> {
-                    val handler = Handler(Looper.getMainLooper())
-                    blue.setImageResource(R.drawable.bluedark)
                     handler.postDelayed({
-                        blue.setImageResource(R.drawable.blue) }, 1000)
-                    }
+                        blue.setImageResource(R.drawable.bluedark) }, delayMillis)
+                    delayMillis += 1000
+                    handler.postDelayed({
+                        blue.setImageResource(R.drawable.blue) }, delayMillis)
+                }
                 1 -> {
-                    val handler = Handler(Looper.getMainLooper())
-                    green.setImageResource(R.drawable.greendark)
                     handler.postDelayed({
-                        green.setImageResource(R.drawable.green) }, 1000)
-                    }
+                        green.setImageResource(R.drawable.greendark) }, delayMillis)
+                    delayMillis += 1000
+                    handler.postDelayed({
+                        green.setImageResource(R.drawable.green) }, delayMillis)
+                }
                 2 -> {
-                    val handler = Handler(Looper.getMainLooper())
-                    pink.setImageResource(R.drawable.pinkdark)
                     handler.postDelayed({
-                        pink.setImageResource(R.drawable.pink) }, 1000)
-                    }
+                        pink.setImageResource(R.drawable.pinkdark) }, delayMillis)
+                    delayMillis += 1000
+                    handler.postDelayed({
+                        pink.setImageResource(R.drawable.pink) }, delayMillis)
+                }
                 3 -> {
-                    val handler = Handler(Looper.getMainLooper())
-                    yellow.setImageResource(R.drawable.yellowdark)
                     handler.postDelayed({
-                        yellow.setImageResource(R.drawable.yellow) }, 1000)
-                    }
-                }//when
-        }//for loop
-        evaluateClicks()
-    }//playGame
+                        yellow.setImageResource(R.drawable.yellowdark) }, delayMillis)
+                    delayMillis += 1000
+                    handler.postDelayed({
+                        yellow.setImageResource(R.drawable.yellow) }, delayMillis)
+                }
+            }// when
+            delayMillis += 1000
+        } // for
 
-//    class colorChange : TimerTask() {
-//        public
-//        override fun run() {
-//            val handler = Handler(Looper.getMainLooper())
-//        }
-//
-//    }//colorChange
+        // bring back playAgain button
+        handler.postDelayed({
+            view.setVisibility(View.VISIBLE) }, delayMillis)
+
+        //evaluateClicks()
+    } // playGame
 
     fun evaluateClicks(){
         var won = false

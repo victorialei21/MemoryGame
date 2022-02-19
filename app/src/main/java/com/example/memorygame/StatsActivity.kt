@@ -1,6 +1,7 @@
 package com.example.memorygame
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -57,6 +58,11 @@ class StatsActivity : AppCompatActivity() {
         statsAdapter = StatsAdapter(this, gameStatList)
         listView.adapter = statsAdapter
     } // updateList
+
+    fun returnToMain(view : View) {
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        startActivity(intent)
+    }
 
 }//StatsActivity
 
