@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
         randomOrder = List(numSquares) { Random.nextInt(0, 4) }
         userAnswers = ArrayList(numSquares)
-        Toast.makeText(applicationContext, randomOrder.toString(), Toast.LENGTH_SHORT).show()
+        //Toast.makeText(applicationContext, randomOrder.toString(), Toast.LENGTH_SHORT).show()
 
         // temporarily remove interactive elements
         view.setVisibility(View.GONE)
