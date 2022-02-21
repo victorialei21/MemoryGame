@@ -19,45 +19,31 @@ class StatsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_stats)
 
         listView = findViewById(R.id.statsList)
-
-        getData()
-        updateList()
+        putData()
     }//onCreate
 
-    fun getData(){
+    fun putData(){
         sharedPreferences = applicationContext.getSharedPreferences(
             "com.example.memorygame", Context.MODE_PRIVATE)
-        var list : ArrayList<String>
-        list = ObjectSerializer
-            .deserialize(
-                sharedPreferences
-                    .getString("difficulties", ObjectSerializer.serialize(ArrayList<String>()))
-            ) as ArrayList<String>
 
-        if (list.size != 0) {
-            difficulties = java.util.ArrayList(list)
-        }
+        var easyWon: Int = sharedPreferences.getInt("easyWon", 0)
+        var easyTotal: Int = sharedPreferences.getInt("easyTotal", 0)
+        var hardWon: Int = sharedPreferences.getInt("hardWon", 0)
+        var hardTotal: Int = sharedPreferences.getInt("hardTotal", 0)
 
-        list = ArrayList<String>()
-        list = ObjectSerializer
-            .deserialize(
-                sharedPreferences
-                    .getString("winPercents", ObjectSerializer.serialize(ArrayList<String>()))
-            ) as ArrayList<String>
+        // calculate win rates
+        val easyRate = ((easyWon.toDouble()/easyTotal.toDouble())*100).toInt()
+        val hardRate = ((hardWon.toDouble()/hardTotal.toDouble())*100).toInt()
 
-        if (list.size != 0) {
-            winPercents = java.util.ArrayList(list)
-        }
-    }//getData
-
-    fun updateList() {
+        // display results
         gameStatList.clear()
-        for (i in 0 until difficulties.count()) {
-            gameStatList.add(GameStat(difficulties[i], winPercents[i].toInt()))
-        }
+        gameStatList.add(GameStat("Easy", easyRate))
+        gameStatList.add(GameStat("Hard", hardRate))
+
         statsAdapter = StatsAdapter(this, gameStatList)
         listView.adapter = statsAdapter
-    } // updateList
+
+    } // putData
 
     fun returnToMain(view : View) {
         val intent = Intent(applicationContext, MainActivity::class.java)
@@ -65,7 +51,6 @@ class StatsActivity : AppCompatActivity() {
     }
 
 }//StatsActivity
-
 
 class GameStat(diff: String, winP: Int){
     var difficulty = diff

@@ -19,15 +19,10 @@ import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 import kotlin.random.Random
 
-//Michelle Yun and Victoria Lei
+// Michelle Yun and Victoria Lei
 
 var statsAdapter: StatsAdapter? = null
 var difficulties = ArrayList<String>()
-var easyWon : Int = 0
-var easyTotal : Int = 0
-var hardWon : Int = 0
-var hardTotal : Int = 0
-var winPercents = ArrayList<String>()
 var gameStatList = ArrayList<GameStat>()
 lateinit var sharedPreferences: SharedPreferences
 
@@ -62,8 +57,6 @@ class MainActivity : AppCompatActivity() {
         difficulties.add("Easy")
         difficulties.add("Hard")
 
-        winPercents.add("0")
-        winPercents.add("0")
     }//onCreate
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -206,32 +199,32 @@ class MainActivity : AppCompatActivity() {
     } // evaluateClicks
 
     fun addStat(won : Boolean, easy : Boolean){
-        if(easy){
-            easyTotal++
-            if(won) {
-                easyWon++
-            }
-            winPercents[0] = ((easyWon.toDouble()/easyTotal.toDouble())*100).toInt().toString()
-        } else {
-            hardTotal++
-            if(won) {
-                hardWon++
-            }
-            winPercents[1] = ((hardWon.toDouble()/hardTotal.toDouble())*100).toInt().toString()
-        }//if else
-
         sharedPreferences = applicationContext.getSharedPreferences(
             "com.example.memorygame", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString(
-            "difficulties", ObjectSerializer.serialize(difficulties))
-            .apply()
-        sharedPreferences.edit().putInt("easyWon", easyWon).apply()
-        sharedPreferences.edit().putInt("easyTotal", easyTotal).apply()
-        sharedPreferences.edit().putInt("hardWon", hardWon).apply()
-        sharedPreferences.edit().putInt("hardTotal", hardTotal).apply()
-        sharedPreferences.edit().putString(
-            "winPercents", ObjectSerializer.serialize(winPercents))
-            .apply()
+
+        if (easy){
+            var easyWon: Int = sharedPreferences.getInt("easyWon", 0)
+            var easyTotal: Int = sharedPreferences.getInt("easyTotal", 0)
+
+            easyTotal++
+            if (won) {
+                easyWon++
+            }
+
+            sharedPreferences.edit().putInt("easyWon", easyWon).apply()
+            sharedPreferences.edit().putInt("easyTotal", easyTotal).apply()
+        } else {
+            var hardWon: Int = sharedPreferences.getInt("hardWon", 0)
+            var hardTotal: Int = sharedPreferences.getInt("hardTotal", 0)
+
+            hardTotal++
+            if (won) {
+                hardWon++
+            }
+
+            sharedPreferences.edit().putInt("hardWon", hardWon).apply()
+            sharedPreferences.edit().putInt("hardTotal", hardTotal).apply()
+        }//if else
     }//addStat
 
 }//MainActivity
