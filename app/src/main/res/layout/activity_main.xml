@@ -48,6 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <GridLayout
+        android:id="@+id/gridLayout"
         android:layout_width="252dp"
         android:layout_height="265dp"
         android:layout_marginTop="96dp"
@@ -106,5 +107,18 @@
             app:layout_constraintTop_toBottomOf="@+id/green"
             app:srcCompat="@drawable/yellow" />
     </GridLayout>
+
+    <TextView
+        android:id="@+id/instructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:text="Memorize the order of how the boxes light up."
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

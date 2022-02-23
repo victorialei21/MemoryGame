@@ -22,7 +22,6 @@ import kotlin.random.Random
 // Michelle Yun and Victoria Lei
 
 var statsAdapter: StatsAdapter? = null
-var difficulties = ArrayList<String>()
 var gameStatList = ArrayList<GameStat>()
 lateinit var sharedPreferences: SharedPreferences
 
@@ -36,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var menuBar : Menu
     lateinit var randomOrder: List<Int>
     lateinit var userAnswers: ArrayList<Int>
+    lateinit var instructions: TextView
     var easyLevel = true
     var buttonClicks = 0
 
@@ -53,9 +53,7 @@ class MainActivity : AppCompatActivity() {
         pink.setEnabled(false)
         yellow = findViewById(R.id.yellow)
         yellow.setEnabled(false)
-
-        difficulties.add("Easy")
-        difficulties.add("Hard")
+        instructions = findViewById(R.id.instructions)
 
     }//onCreate
 
@@ -144,11 +142,18 @@ class MainActivity : AppCompatActivity() {
             delayMillis += 1000
         } // for
 
-        // enable user buttons
-        blue.setEnabled(true)
-        green.setEnabled(true)
-        pink.setEnabled(true)
-        yellow.setEnabled(true)
+        handler.postDelayed({
+            // post instructions
+            instructions.text = "Click the boxes in the order they lit up."
+
+            // enable user buttons
+            blue.setEnabled(true)
+            green.setEnabled(true)
+            pink.setEnabled(true)
+            yellow.setEnabled(true)
+
+        }, delayMillis)
+
 
     } // playGame
 
@@ -189,6 +194,7 @@ class MainActivity : AppCompatActivity() {
         startButton.text = "Play Again"
         startButton.setVisibility(View.VISIBLE)
         menuBar.setGroupEnabled(0, true)
+        instructions.text = "Memorize the order of how the boxes light up."
 
         // disable user buttons
         blue.setEnabled(false)
